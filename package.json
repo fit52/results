@@ -1,0 +1,31 @@
+{
+  "name": "fit52",
+  "version": "1.0.0",
+  "description": "fit52 results processing",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "get-runner-data": "node ./src/outputs/getRunnerData.js",
+    "add-participants": "node ./src/populateDb.js",
+    "get-event": "node ./src/outputs/getEventData.js",
+    "get-records": "node ./src/outputs/getRecordData.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fit52/results.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fit52/results/issues"
+  },
+  "homepage": "https://github.com/fit52/results#readme",
+  "devDependencies": {
+    "eslint": "^5.2.0"
+  },
+  "dependencies": {
+    "@cloudant/cloudant": "^2.3.0",
+    "csv-parse": "^2.5.0",
+    "moment": "^2.22.2",
+    "uuid": "^3.3.2"
+  }
+}
