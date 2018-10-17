@@ -9,7 +9,7 @@ let runners = csvParse(fs.readFileSync(path.join('.', process.argv[2])));
 
 let data = [];
 
-runners.foreach(runner => {
+runners.forEach(runner => {
     if (!['f', 'm'].includes(runner[3].toLowerCase())) throw new Error(`${runner.slice(0, 2)} Invalid gender: ${runner[3]}. Should be 'f' or 'm'`);
     if (![0, 1, 2, 3].includes(parseInt(runner[5]))) throw new Error(`Invalid exercise value: ${runner[5]}. Should be 0-3`);
     
