@@ -23,6 +23,7 @@ Record data: `npm run get-records`
 ```
 
 ### **Outputs**:
+**Outputs are designed to be used temporarily to update the current website**
 Output commands output the data to `secrets/output-data`\
 **Events**: The outputs are in a folder labled `event[no]`\
 **Records**: The outputs are in the folder labeled `global-records`.\
