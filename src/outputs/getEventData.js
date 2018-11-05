@@ -40,18 +40,18 @@ const outResults = async results => {
 
 /**
  * Outputs data from the event
- * @param {any[]} stats The stats from the event
+ * @param {any[]} counts The counts from the event
  * @param {string} date The date of the event
  */
-const outStats = async (stats, date) => {
+const outcounts = async (counts, date) => {
     let dateString = moment(date).format('D-MMM-YY');
 
-    let out = Object.assign({ dateString }, stats);
-    fs.writeFile(`${path}/stats.txt`, JSON.stringify(out), err => {
+    let out = Object.assign({ dateString }, counts);
+    fs.writeFile(`${path}/counts.txt`, JSON.stringify(out), err => {
         if (err) {
             console.error(err.message);
         } else {
-            // console.log('done stats');
+            // console.log('done counts');
         }
     });
 };
@@ -66,7 +66,7 @@ db.get(`event/${eventNo}`)
     });
     
     outResults(res.results);
-    outStats(res.stats, res.date);
+    outcounts(res.counts, res.date);
 })
 .then(() => {
     console.log(`Finished output for event ${eventNo}`);
