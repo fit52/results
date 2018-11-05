@@ -44,7 +44,7 @@ const calcAgeGrade = (age, distance, gender, time) => {
     if (!ageGradeData) throw new Error('Invalid age must be 5-100');
 
     let ageGradeTime = moment.duration(ageGradeData[2]);
-    let ageGrade = ageGradeTime / runnerTime;
+    let ageGrade = ((ageGradeTime / runnerTime) * 100 ).toFixed(2);
     // console.log(ageGrade);
 
     return ageGrade;

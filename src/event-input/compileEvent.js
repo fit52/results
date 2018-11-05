@@ -35,15 +35,16 @@ const compileEvent = (results) => {
 
         volunteers: [],
 
-        stats: {
-            no2k: no2k,
-            no5k: no5k,
-            nototal: no2k + no5k,
+        counts: {
+            // 2k cannot be used as object props connot start w/ a number
+            twok: no2k,
+            fivek: no5k,
+            total: no2k + no5k,
 
-            noFirstTimes: noFirstTimes,
-            noPbs: noPbs,
+            firstTimes: noFirstTimes,
+            pbs: noPbs,
 
-            noVolunteers: 0
+            volunteers: 0
         },
 
         results: results

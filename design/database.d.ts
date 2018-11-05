@@ -32,20 +32,22 @@ export interface event extends dbEntry {
     // _id should be 'event/{event #}'
     
     number: number
-    date: Date // date-string
+    date: Date
     course: number
     
-    volunteerNames: runner[]
+    volunteers: runner[]
 
-    stats: {
-        no2k: number
-        no5k: number
-        noTotal: number
+    counts: {
+        // Had to use 'two' as opposed to '2' as objects cannot have props that
+        // begin with a number
+        twok: number
+        fivek: number
+        total: number
 
-        noFirstTimers: number
-        noPbs: number
+        firstTimers: number
+        pbs: number
 
-        noVolunteers: number
+        volunteers: number
     }
 
     results: recordedEvent[]
