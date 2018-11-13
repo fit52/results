@@ -68,3 +68,6 @@ config/
 
 # Secrets
 secrets/
+
+# macOS stuffs
+.DS_Store
