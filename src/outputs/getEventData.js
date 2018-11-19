@@ -59,14 +59,14 @@ const outcounts = async (counts, date) => {
 
 db.get(`event/${eventNo}`)
 .then(async res => {
-    fs.mkdir(path, err => {
+    fs.mkdir(path, { recursive: true }, err => {
         if (err && err.code !== 'EEXIST') {
             console.log(err);
+        } else {
+            outResults(res.results);
+            outcounts(res.counts, res.date);
         }
     });
-    
-    outResults(res.results);
-    outcounts(res.counts, res.date);
 })
 .then(() => {
     console.log(`Finished output for event ${eventNo}`);

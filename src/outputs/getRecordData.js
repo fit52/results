@@ -21,40 +21,40 @@ const formatRecord = result => {
 db.get('global_records')
 .then(res => {
     let path = `${__dirname}/../../secrets/output-data/global-records`;
-    fs.mkdir(path, err => {
+    fs.mkdir(path, { recursive: true }, err => {
         if (err && err.code !== 'EEXIST') {
             console.log(err);
-        }
-    });
+        } else {
+            delete res._id;
+            delete res._rev;
 
-    delete res._id;
-    delete res._rev;
-
-    let ageGradeFormatted = [];
-    for (let x of res.ageGrade) {
-        ageGradeFormatted.push(formatRecord(x));
-    }
-
-    fs.writeFile(`${path}/ageGrade.txt`, JSON.stringify(ageGradeFormatted), err => {
-        if (err) console.error(err.message);
-    });
-
-    delete res.ageGrade;
-
-    for (let x in res) {
-        let upper_cat = res[x];
-
-        for (let y in upper_cat) {
-            let lower_cat = upper_cat[y];
-            let formated = [];
-
-            for (let result of lower_cat) {
-                formated.push(formatRecord(result));
+            let ageGradeFormatted = [];
+            for (let x of res.ageGrade) {
+                ageGradeFormatted.push(formatRecord(x));
             }
 
-            fs.writeFile(`${path}/${x}${y}.txt`, JSON.stringify(formated), err => {
+            fs.writeFile(`${path}/ageGrade.txt`, JSON.stringify(ageGradeFormatted), err => {
                 if (err) console.error(err.message);
             });
+
+            delete res.ageGrade;
+
+            for (let x in res) {
+                let upper_cat = res[x];
+
+                for (let y in upper_cat) {
+                    let lower_cat = upper_cat[y];
+                    let formated = [];
+
+                    for (let result of lower_cat) {
+                        formated.push(formatRecord(result));
+                    }
+
+                    fs.writeFile(`${path}/${x}${y}.txt`, JSON.stringify(formated), err => {
+                        if (err) console.error(err.message);
+                    });
+                }
+            }
         }
-    }
+    });
 });

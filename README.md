@@ -1,9 +1,9 @@
-# **Fit52 Results Prossessing**
-**Adding an Event**\
-`npm start finisherFile stopwatchFile` or `npm start fullEventDataFile`
-
+# **Fit52 Results Processing**
 **Adding Participants to the db**\
 `npm run add-participants runnerInfoFile`
+
+**Adding an Event**\
+`npm start finisherFile stopwatchFile` or `npm start fullEventDataFile`
 
 **Getting data from the db**\
 Event data: `npm run get-event eventNo`\
@@ -17,7 +17,7 @@ Record data: `npm run get-records`
 **Login Data** should be in stored in `secrets/login.json`, format:
 ```json
 {
-    "url": "cloundant url",
+    "url": "cloudant url",
     "dbName": "db name"
 }
 ```
@@ -25,22 +25,22 @@ Record data: `npm run get-records`
 ### **Outputs**:
 **Outputs are designed to be used temporarily to update the current website**
 Output commands output the data to `secrets/output-data`\
-**Events**: The outputs are in a folder labled `event[no]`\
+**Events**: The outputs are in a folder labeled `event[no]`\
 **Records**: The outputs are in the folder labeled `global-records`.\
-**Runners**: Ouputs into `runnerData.txt`
+**Runners**: Outputs into `runnerData.txt`
 
 
-## Csv Formats
-**Finisher File**: `[ticketno,full name,distance]`\
-The last line should be the `[course number]`
+## CSV Formats
+**Finisher File**: `ticketno,full-name,distance`\
+The last line should be the `course-number`
 
 **Stopwatch File**:\
 Should be an output file from the stopwatches
 
-**Full Event Data File**: `[full name,distance,time]`\
-The last line should be the `[date,course number]`\
+**Full Event Data File**: `full-name,distance,time`\
+The last line should be the `date,course-number`\
 Time format should be `hh:mm:ss` and date format should be `DD/MM/YYYY`
 
-**Runner Info File**: `[firstname,surname,dob,gender,email,exercise,IBMer]`\
+**Runner Info File**: `firstname,surname,dob,gender,email,exercise,IBMer`\
 Date format should be `YYYY-MM-DD`\
-Ecercise should be from `0-3` and IBMer should be `0` or `1`
+Exercise should be from `0-3` and IBMer should be `0` or `1`
