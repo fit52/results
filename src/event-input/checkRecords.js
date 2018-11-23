@@ -40,16 +40,16 @@ const removeDuplicates = (records, name) => {
  * @param {'f' | 'm'} gender The gender of the participant
  */
 const checkRecords = (globalRecords, result, gender) => {
-    let distanceString = 'fastest' + result.distance.toString() + 'k';
+    let distanceString = 'fastest' + result.distance + 'k';
     let genderString = (gender === 'f' ? 'fe' : '') + 'male';
     // console.log(distanceString, genderString);
-
-    let category = globalRecords[distanceString][genderString];
+    
+    let category = globalRecords[distanceString][genderString].slice();
     if (!category) throw new Error('category not found');
     // console.log(category);
 
-    for (let x of category) {
-        let pos = category.indexOf(x);
+    for (let pos = 0; pos < category.length; pos++) {
+        let x = category[pos];
 
         if (!x.time) {
             category.splice(pos, 0, result);
@@ -57,7 +57,7 @@ const checkRecords = (globalRecords, result, gender) => {
         }
 
         let recordTime = moment.duration(x.time).asSeconds();
-        if (result.time.asSeconds() < recordTime) {
+        if (moment.duration(result.time).asSeconds() < recordTime) {
             category.splice(pos, 0, result);
             break;
         }
@@ -67,9 +67,9 @@ const checkRecords = (globalRecords, result, gender) => {
     category.length = 5;
     // console.log(category);
 
-    let ageGradeRecords = globalRecords.ageGrade;
-    for (let x of ageGradeRecords) {
-        let pos = ageGradeRecords.indexOf(x);
+    let ageGradeRecords = globalRecords.ageGrade.slice();
+    for (let pos = 0; pos < ageGradeRecords.length; pos++) {
+        let x = ageGradeRecords[pos];
 
         if (!x.ageGrade) {
             ageGradeRecords.splice(pos, 0, result);

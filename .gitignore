@@ -71,3 +71,6 @@ secrets/
 
 # macOS stuffs
 .DS_Store
+
+# vscode
+.vscode/
