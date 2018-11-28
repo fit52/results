@@ -16,7 +16,7 @@ if (!upToEvent) throw new Error('no event given');
 try {
     upToEvent = parseInt(upToEvent);
 } catch (error) {
-    throw new Error('no event given');
+    throw new Error('invalid event number given');
 }
 
 // Reset Runners
