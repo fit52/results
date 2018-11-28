@@ -129,6 +129,8 @@ db.find({
             let runnerindex = docs.runners.findIndex(x => x.uuid === result.uuid);
             let runner = docs.runners[runnerindex];
 
+            result.distance = result.distance.toString();
+
             let pbRes = calcPb(result, runner);
             // This line may be unnecessary
             runner = pbRes.runner;
