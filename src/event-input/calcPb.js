@@ -16,7 +16,7 @@ const calcPb = (result, runner) => {
     let newPb = false;
     
     let distance = result.distance;
-    if (!['2', '5'].includes(distance.toString())) throw new Error('distance invalid');
+    if (!['2', '5'].includes(distance)) throw new Error('distance invalid');
 
     let fastest = runner.stats[`records${distance}k`].fastest;
     let slowest = runner.stats[`records${distance}k`].slowest;
