@@ -16,7 +16,7 @@ const calcPb = (result, runner) => {
     let newPb = false;
     
     let distance = result.distance;
-    if (!['2', '5'].includes(distance)) throw new Error('distance invalid');
+    if (![2, 5].includes(distance)) throw new Error('distance invalid');
 
     let fastest = runner.stats[`records${distance}k`].fastest;
     let slowest = runner.stats[`records${distance}k`].slowest;
@@ -33,12 +33,12 @@ const calcPb = (result, runner) => {
         let fastestTime = moment.duration(fastest.time).asSeconds();
         let slowestTime = moment.duration(slowest.time).asSeconds();
 
-        if (result.time.asSeconds() < fastestTime) {
+        if (moment.duration(result.time).asSeconds() < fastestTime) {
             runner.stats[`records${distance}k`].fastest = result;
             newPb = true;
         }
 
-        if (result.time.asSeconds() > slowestTime) {
+        if (moment.duration(result.time).asSeconds() > slowestTime) {
             runner.stats[`records${distance}k`].slowest = result;
         }
     }
@@ -67,7 +67,7 @@ const calcPb = (result, runner) => {
     if (newPb && !result.firstEvent) {
         runner.stats.noPbs ++;
         result.pb = true;
-        result.notes.push('PB');
+        // result.notes.push('PB');
     }
 
     return {

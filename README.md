@@ -10,6 +10,11 @@ Event data: `npm run get-event eventNo`\
 Participant data: `npm run get-runner-data`\
 Record data: `npm run get-records`
 
+**Modifying the db**\
+`npm run rebuild eventNo`\
+This will rebuild the db **up to and including** the event number provided.\
+If the number given is greater that the last event in the db, the whole db will be rebuilt.
+
 ## Secrets Folder
 
 **Any personal/secret/event data should be stored in the secrets folder**
@@ -23,7 +28,7 @@ Record data: `npm run get-records`
 ```
 
 ### **Outputs**:
-**Outputs are designed to be used temporarily to update the current website**
+**Outputs are designed to be used temporarily to update the current website**\
 Output commands output the data to `secrets/output-data`\
 **Events**: The outputs are in a folder labeled `event[no]`\
 **Records**: The outputs are in the folder labeled `global-records`.\
