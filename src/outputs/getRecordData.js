@@ -3,18 +3,23 @@ const moment = require('moment');
 
 const { db } = require('../connect')();
 
-const formatRecord = result => {
-    delete result.uuid;
-    delete result.pos;
-    delete result.distance;
-    let time = moment.duration(result.time);
-    result.time = moment({minutes: time.minutes(), seconds: time.seconds()}).format('mm:ss');
-    delete result.firstEvent;
-    delete result.pb;
-    delete result.noEvents;
-    delete result.notes;
+const formatRecord = (result, ageGrade = false) => {
+    let out = [];
 
-    return result;
+    out.push(result.name);
+
+    if (ageGrade) {
+        out.push(result.ageGrade + '%');
+    } else {
+        let time = moment.duration(result.time);
+        out.push(moment({ hours: time.hours(), minutes: time.minutes(), seconds: time.seconds()}).format('HH:mm:ss'));
+    }
+
+    out.push(result.event.number);
+    out.push(moment(result.event.date).format('DD/MM/YYYY'));
+    out.push(result.event.course);
+
+    return out.join(',');
 };
 
 
@@ -30,13 +35,14 @@ db.get('global_records')
 
             let ageGradeFormatted = [];
             for (let x of res.ageGrade) {
-                ageGradeFormatted.push(formatRecord(x));
+                ageGradeFormatted.push(formatRecord(x, true));
             }
 
-            fs.writeFile(`${path}/ageGrade.txt`, JSON.stringify(ageGradeFormatted), err => {
+            fs.writeFile(`${path}/ageGrade.csv`, ageGradeFormatted.join('\n'), err => {
                 if (err) console.error(err.message);
             });
 
+            // Need to delete ageGrade as we iterate over the object; not including age grade
             delete res.ageGrade;
 
             for (let x in res) {
@@ -46,15 +52,20 @@ db.get('global_records')
                     let lower_cat = upper_cat[y];
                     let formated = [];
 
+                    formated.push([
+                        `${x}s ${y}`, 'Time', 'Event', 'Date', 'Course'
+                    ].join(','));
+
                     for (let result of lower_cat) {
                         formated.push(formatRecord(result));
                     }
 
-                    fs.writeFile(`${path}/${x}${y}.txt`, JSON.stringify(formated), err => {
+                    fs.writeFile(`${path}/${x}${y}.csv`, formated.join('\n'), err => {
                         if (err) console.error(err.message);
                     });
                 }
             }
         }
     });
-});
+})
+.then(() => console.log('Done!'));

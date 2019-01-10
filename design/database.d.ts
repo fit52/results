@@ -84,6 +84,10 @@ export interface runner extends dbEntry {
             worst: recordedEvent
         }
 
+        noPbs: number
+        no2k: number
+        no5k: number
+
         noTotalEvents: number
         achievements?: string[]
         volunteering: string[]

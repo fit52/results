@@ -9,6 +9,8 @@ const moment = require('moment');
 const { db } = require('../connect')();
 
 const eventNo = process.argv[2];
+if (!eventNo) throw new Error('No Event Number Provided');
+
 const path = `${__dirname}/../../secrets/output-data/event${eventNo}`;
 
 /**
@@ -21,15 +23,24 @@ const outResults = async results => {
         delete x.pos;
         delete x.uuid;
         let time = moment.duration(x.time);
-        x.time = moment({minutes: time.minutes(), seconds: time.seconds()}).format('mm:ss');
+        x.time = moment({ hours: time.hours(), minutes: time.minutes(), seconds: time.seconds()}).format('HH:mm:ss');
+        x.ageGrade = x.ageGrade + '%';
         delete x.firstEvent;
         delete x.pb;
         x.notes = x.notes.join(', ');
 
-        return x;
+        return Object.values(x).join(',');
     });
 
-    fs.writeFile(`${path}/results.txt`, JSON.stringify(out), err => {
+    // console.log(out);
+
+    out.sort((a, b) => {
+        if (a[0] < b[0]) return -1;
+        if (a[0] > b[0]) return 1;
+        return 0; 
+    });
+
+    fs.writeFile(`${path}/results.csv`, out.join('\n'), err => {
         if (err) {
             console.error(err.message);
         } else {
@@ -46,8 +57,11 @@ const outResults = async results => {
 const outcounts = async (counts, date) => {
     let dateString = moment(date).format('D-MMM-YY');
 
-    let out = Object.assign({ dateString }, counts);
-    fs.writeFile(`${path}/counts.txt`, JSON.stringify(out), err => {
+    // let out = Object.assign({ dateString }, counts);
+    let out = Object.values(counts);
+    out.unshift(dateString);
+
+    fs.writeFile(`${path}/counts.csv`, JSON.stringify(out).replace(/\[|\]|"/g, ''), err => {
         if (err) {
             console.error(err.message);
         } else {
