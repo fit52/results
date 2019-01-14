@@ -34,6 +34,10 @@ db.get('global_records')
             delete res._rev;
 
             let ageGradeFormatted = [];
+
+            ageGradeFormatted.push([
+                'Name', 'Time', 'Event', 'Date', 'Course'
+            ]);
             for (let x of res.ageGrade) {
                 ageGradeFormatted.push(formatRecord(x, true));
             }
@@ -52,9 +56,9 @@ db.get('global_records')
                     let lower_cat = upper_cat[y];
                     let formated = [];
 
-                    formated.push([
-                        `${x}s ${y}`, 'Time', 'Event', 'Date', 'Course'
-                    ].join(','));
+                    formated.push(
+                        'Name, Time, Event, Date, Course'
+                    );
 
                     for (let result of lower_cat) {
                         formated.push(formatRecord(result));

@@ -19,17 +19,22 @@ const path = `${__dirname}/../../secrets/output-data/event${eventNo}`;
  */
 const outResults = async results => {
     let out = results.map(x => {
-        delete x.event;
-        delete x.pos;
-        delete x.uuid;
+
         let time = moment.duration(x.time);
         x.time = moment({ hours: time.hours(), minutes: time.minutes(), seconds: time.seconds()}).format('HH:mm:ss');
+        
         x.ageGrade = x.ageGrade + '%';
-        delete x.firstEvent;
-        delete x.pb;
+        
         x.notes = x.notes.join(', ');
 
-        return Object.values(x).join(',');
+        return [
+            x.name,
+            x.distance,
+            x.time,
+            x.ageGrade,
+            x.noEvents,
+            x.notes
+        ].join(',');
     });
 
     // console.log(out);
@@ -39,6 +44,10 @@ const outResults = async results => {
         if (a[0] > b[0]) return 1;
         return 0; 
     });
+
+    out.unshift(
+        'Name, Distance, Time, Age Grade, #Event, Notes'
+    );
 
     fs.writeFile(`${path}/results.csv`, out.join('\n'), err => {
         if (err) {
@@ -57,11 +66,19 @@ const outResults = async results => {
 const outcounts = async (counts, date) => {
     let dateString = moment(date).format('D-MMM-YY');
 
-    // let out = Object.assign({ dateString }, counts);
-    let out = Object.values(counts);
-    out.unshift(dateString);
 
-    fs.writeFile(`${path}/counts.csv`, JSON.stringify(out).replace(/\[|\]|"/g, ''), err => {
+    let out = [
+        'Date, #2K, #5K, #Total, #FirstTimers, #PBs',
+        [
+        dateString,
+        counts.twok,
+        counts.fivek,
+        counts.total,
+        counts.firstTimers,
+        counts.pbs
+    ].join(', ')];
+
+    fs.writeFile(`${path}/counts.csv`, out.join('\n'), err => {
         if (err) {
             console.error(err.message);
         } else {
