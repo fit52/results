@@ -4,7 +4,7 @@
  * @param {object[]} results The results from the event
  * @returns {object} The event object
  */
-const compileEvent = (results) => {
+const compileEvent = (results, noPb) => {
     let eventNumber = results[0].event.number;
     let eventDate = results[0].event.date;
     let course = results[0].event.course;
@@ -34,6 +34,8 @@ const compileEvent = (results) => {
         course,
 
         volunteers: [],
+
+        noPb,
 
         counts: {
             // 2k cannot be used as object props connot start w/ a number

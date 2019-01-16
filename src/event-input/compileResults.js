@@ -93,15 +93,17 @@ const compileResults = async (argv) => {
             result.notes.push('First Event');
         }
 
-        let age = moment().diff(new Date(runner.dob), 'years');
-        result.ageGrade = calcAgeGrade(age, result.distance, runner.gender, result.time);
-        // console.log(result.ageGrade);
-
+        // Don't calculate ageGrades or PBs if the noPb flag provided
         if (!argv.noPb) {
+            let age = moment().diff(new Date(runner.dob), 'years');
+            result.ageGrade = calcAgeGrade(age, result.distance, runner.gender, result.time);
+
             let pbRes = calcPb(result, runner);
             // These 2 lines may be unnecessary
             result = pbRes.result;
             runner = pbRes.runner;
+        } else {
+            result.ageGrade = 0;
         }
 
         runner.eventList.push(result);

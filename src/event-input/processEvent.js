@@ -35,24 +35,26 @@ const processEvent = argv => {
         let results = res.results;
         let runners = res.runners;
 
-        let event = compileEvent(results);
+        let event = compileEvent(results, argv.noPb);
 
         let globalRecords;
-        await db.get('global_records')
-        .then(res => {
-            if (typeof res !== 'object') {
-                throw new Error(res);
+        if (!argv.noPb) {
+            await db.get('global_records')
+            .then(res => {
+                if (typeof res !== 'object') {
+                    throw new Error(res);
+                }
+
+                globalRecords = res;
+            });
+
+            for (let i = 0; i < results.length; i++) {
+                // console.log(globalRecords);
+                let result = results[i];
+                let gender = runners[i].gender;
+
+                globalRecords = checkRecords(globalRecords, result, gender);
             }
-
-            globalRecords = res;
-        });
-
-        for (let i = 0; i < results.length; i++) {
-            // console.log(globalRecords);
-            let result = results[i];
-            let gender = runners[i].gender;
-
-            globalRecords = checkRecords(globalRecords, result, gender);
         }
 
         // console.log(globalRecords);
@@ -67,9 +69,9 @@ const processEvent = argv => {
         // console.log(data.event);
         // console.log(data.runners);
         // console.log(data.globalRecords);
-        // insertEvent(data.event);
-        // updateRunners(data.runners);
-        // updateRecords(data.globalRecords);
+        insertEvent(data.event);
+        updateRunners(data.runners);
+        if (data.globalRecords) updateRecords(data.globalRecords);
     })
     .then(() => {
         console.log(`Finished: ${argv}`);
