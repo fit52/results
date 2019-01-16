@@ -13,11 +13,11 @@ const getResults = require('./getResults');
  * Compiles results and runners after a race givien the files
  * for the finishers and stopwatches
  * 
- * @param {string[]} files The finisher & stopwatch / past-event data
+ * @param {string[]} argv The finisher & stopwatch / past-event data
  * 
  * @returns {{ results: object[], runners: object[] }} The compiled results and runners
  */
-const compileResults = async (files) => {
+const compileResults = async (argv) => {
     const { db } = require('../connect')();
 
     let eventRes = await db.find({
@@ -29,7 +29,7 @@ const compileResults = async (files) => {
     });
     let events = eventRes.docs;
 
-    let { results, date } = getResults(files);
+    let { results, date } = getResults(argv._);
 
 
     const checkEvents = (date, events) => {  
@@ -97,10 +97,12 @@ const compileResults = async (files) => {
         result.ageGrade = calcAgeGrade(age, result.distance, runner.gender, result.time);
         // console.log(result.ageGrade);
 
-        let pbRes = calcPb(result, runner);
-        // These 2 lines may be unnecessary
-        result = pbRes.result;
-        runner = pbRes.runner;
+        if (!argv.noPb) {
+            let pbRes = calcPb(result, runner);
+            // These 2 lines may be unnecessary
+            result = pbRes.result;
+            runner = pbRes.runner;
+        }
 
         runner.eventList.push(result);
         runner.stats[`no${result.distance}k`] ++;

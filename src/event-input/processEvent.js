@@ -26,11 +26,11 @@ const updateRecords = async (globalRecords) => {
  * Processes the results for an event given the finishs and times
  * files should be provided in order finisher, times
  * 
- * @param {string[]} files The paths for the files to get the data from
+ * @param {string[]} argv The paths for the files to get the data from
  */
-const processEvent = (files) => {
-    if (files.length === 0) throw new Error('No files specified');
-    compileResults(files)
+const processEvent = argv => {
+    if (Object.keys(argv)   .length === 0) throw new Error('No files specified');
+    compileResults(argv)
     .then(async res => {
         let results = res.results;
         let runners = res.runners;
@@ -67,12 +67,12 @@ const processEvent = (files) => {
         // console.log(data.event);
         // console.log(data.runners);
         // console.log(data.globalRecords);
-        insertEvent(data.event);
-        updateRunners(data.runners);
-        updateRecords(data.globalRecords);
+        // insertEvent(data.event);
+        // updateRunners(data.runners);
+        // updateRecords(data.globalRecords);
     })
     .then(() => {
-        console.log(`Finished: ${files}`);
+        console.log(`Finished: ${argv}`);
     })
     .catch(err => {
         console.log(err);
