@@ -21,7 +21,7 @@ const outResults = async results => {
     let out = results.map(x => {
 
         let time = moment.duration(x.time);
-        x.time = moment({ hours: time.hours(), minutes: time.minutes(), seconds: time.seconds()}).format('HH:mm:ss');
+        x.time = moment({hours: time.hours(), minutes: time.minutes(), seconds: time.seconds()}).format('HH:mm:ss');
         
         x.ageGrade = x.ageGrade + '%';
         
@@ -34,16 +34,20 @@ const outResults = async results => {
             x.ageGrade,
             x.noEvents,
             x.notes
-        ].join(',');
+        ].join(', ');
     });
 
     // console.log(out);
 
     out.sort((a, b) => {
-        if (a[0] < b[0]) return -1;
-        if (a[0] > b[0]) return 1;
-        return 0; 
+        let aName = a.substr(0, a.indexOf(',')).toUpperCase();
+        let bName = b.substr(0, b.indexOf(',')).toUpperCase();
+
+        if (aName < bName) return -1;
+        if (aName > bName) return 1;
+        return 0;
     });
+
 
     out.unshift(
         'Name, Distance, Time, Age Grade, #Event, Notes'
