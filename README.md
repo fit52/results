@@ -32,7 +32,7 @@ If the number given is greater that the last event in the db, the whole db will 
 Output commands output the data to `secrets/output-data`\
 **Events**: The outputs are in a folder labeled `event[no]`\
 **Records**: The outputs are in the folder labeled `global-records`.\
-**Runners**: Outputs into `runnerData.txt`
+**Runners**: Outputs into `runnerData.csv`
 
 
 ## CSV Formats
