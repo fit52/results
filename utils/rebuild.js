@@ -131,16 +131,18 @@ db.find({
 
             result.distance = result.distance.toString();
 
-            let pbRes = calcPb(result, runner);
-            // This line may be unnecessary
-            runner = pbRes.runner;
+            if (!event.noPb) {
+                let pbRes = calcPb(result, runner);
+                // This line may be unnecessary
+                runner = pbRes.runner;
+                global_records = checkRecords(global_records, result, runner.gender);
+            }
 
             runner.eventList.push(result);
             runner.stats[`no${result.distance}k`] ++;
             runner.stats.noTotalEvents ++;
             
             // console.log(docs.global_records);
-            global_records = checkRecords(global_records, result, runner.gender);
             docs.runners[runnerindex] = runner;
         }
     }
