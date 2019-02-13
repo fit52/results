@@ -37,6 +37,8 @@ export interface event extends dbEntry {
     
     volunteers: runner[]
 
+    noPb: boolean
+
     counts: {
         // Had to use 'two' as opposed to '2' as objects cannot have props that
         // begin with a number

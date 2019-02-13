@@ -26,33 +26,35 @@ const updateRecords = async (globalRecords) => {
  * Processes the results for an event given the finishs and times
  * files should be provided in order finisher, times
  * 
- * @param {string[]} files The paths for the files to get the data from
+ * @param {string[]} argv The paths for the files to get the data from
  */
-const processEvent = (files) => {
-    if (files.length === 0) throw new Error('No files specified');
-    compileResults(files)
+const processEvent = argv => {
+    if (Object.keys(argv).length === 0) throw new Error('No files specified');
+    compileResults(argv)
     .then(async res => {
         let results = res.results;
         let runners = res.runners;
 
-        let event = compileEvent(results);
+        let event = compileEvent(results, argv.noPb);
 
         let globalRecords;
-        await db.get('global_records')
-        .then(res => {
-            if (typeof res !== 'object') {
-                throw new Error(res);
+        if (!argv.noPb) {
+            await db.get('global_records')
+            .then(res => {
+                if (typeof res !== 'object') {
+                    throw new Error(res);
+                }
+
+                globalRecords = res;
+            });
+
+            for (let i = 0; i < results.length; i++) {
+                // console.log(globalRecords);
+                let result = results[i];
+                let gender = runners[i].gender;
+
+                globalRecords = checkRecords(globalRecords, result, gender);
             }
-
-            globalRecords = res;
-        });
-
-        for (let i = 0; i < results.length; i++) {
-            // console.log(globalRecords);
-            let result = results[i];
-            let gender = runners[i].gender;
-
-            globalRecords = checkRecords(globalRecords, result, gender);
         }
 
         // console.log(globalRecords);
@@ -69,10 +71,10 @@ const processEvent = (files) => {
         // console.log(data.globalRecords);
         insertEvent(data.event);
         updateRunners(data.runners);
-        updateRecords(data.globalRecords);
+        if (data.globalRecords) updateRecords(data.globalRecords);
     })
     .then(() => {
-        console.log(`Finished: ${files}`);
+        console.log(`Finished: ${argv}`);
     })
     .catch(err => {
         console.log(err);

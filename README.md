@@ -3,7 +3,8 @@
 `npm run add-participants runnerInfoFile`
 
 **Adding an Event**\
-`npm start finisherFile stopwatchFile` or `npm start fullEventDataFile`
+`npm start [--noPb] -- finisherFile stopwatchFile` or `npm start [--noPb] -- fullEventDataFile`\
+The optional `--noPb` flag is to indicate that the times for this event should not count towards PBs or global records.
 
 **Getting data from the db**\
 Event data: `npm run get-event eventNo`\

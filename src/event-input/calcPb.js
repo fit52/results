@@ -21,14 +21,11 @@ const calcPb = (result, runner) => {
     let fastest = runner.stats[`records${distance}k`].fastest;
     let slowest = runner.stats[`records${distance}k`].slowest;
 
-    if (!fastest || !slowest) {
-        if (!fastest) {
-            runner.stats[`records${distance}k`].fastest = result;
-        }
 
-        if (!slowest) {
-            runner.stats[`records${distance}k`].slowest = result;
-        }
+    if (!fastest) {
+        runner.stats[`records${distance}k`].fastest = result;
+    } else if (!slowest) {
+        runner.stats[`records${distance}k`].slowest = result;
     } else {
         let fastestTime = moment.duration(fastest.time).asSeconds();
         let slowestTime = moment.duration(slowest.time).asSeconds();
@@ -46,14 +43,10 @@ const calcPb = (result, runner) => {
     let bestAgeGrade = runner.stats.recordsAgeGrade.best;
     let worstAgeGrade = runner.stats.recordsAgeGrade.worst;
 
-    if (!bestAgeGrade || !worstAgeGrade) {
-        if (!bestAgeGrade) {
-            runner.stats.recordsAgeGrade.best = result;
-        }
-
-        if (!worstAgeGrade) {
-            runner.stats.recordsAgeGrade.worst = result;
-        }
+    if (!bestAgeGrade) {
+        runner.stats.recordsAgeGrade.best = result;
+    } else if (!worstAgeGrade) {
+        runner.stats.recordsAgeGrade.worst = result;
     } else {
         if (result.ageGrade > bestAgeGrade.ageGrade) {
             runner.stats.recordsAgeGrade.best = result;

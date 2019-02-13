@@ -1,5 +1,12 @@
+const minimist = require('minimist');
+
+const argv = minimist(process.argv.slice(2), {
+    boolean: [ 'noPb' ],
+    // stopEarly: true
+});
+
 const processEvent = require('./event-input/processEvent');
 
-let args = process.argv;
+console.log(argv);
 
-processEvent(args.slice(2));
+processEvent(argv);
