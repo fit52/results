@@ -29,7 +29,7 @@ const updateRecords = async (globalRecords) => {
  * @param {string[]} argv The paths for the files to get the data from
  */
 const processEvent = argv => {
-    if (Object.keys(argv)   .length === 0) throw new Error('No files specified');
+    if (Object.keys(argv).length === 0) throw new Error('No files specified');
     compileResults(argv)
     .then(async res => {
         let results = res.results;
