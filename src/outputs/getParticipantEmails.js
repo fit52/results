@@ -33,6 +33,8 @@ db.find({
     ]
 })
 .then(({ docs }) => {
+    if (docs.length === 0) throw new Error('Event provided doesn\'t exist');
+
     let out = docs.map(email => email.email );
 
     fs.mkdir(dirPath, { recursive: true }, err => {
