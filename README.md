@@ -9,7 +9,8 @@ The optional `--noPb` flag is to indicate that the times for this event should n
 **Getting data from the db**\
 Event data: `npm run get-event eventNo`\
 Participant data: `npm run get-runner-data`\
-Record data: `npm run get-records`
+Record data: `npm run get-records`\
+Emails of participants for an event: `npm run get-participant-emails eventNo`
 
 **Modifying the db**\
 `npm run rebuild eventNo`\
@@ -33,7 +34,8 @@ If the number given is greater that the last event in the db, the whole db will 
 Output commands output the data to `secrets/output-data`\
 **Events**: The outputs are in a folder labeled `event[no]`\
 **Records**: The outputs are in the folder labeled `global-records`.\
-**Runners**: Outputs into `runnerData.csv`
+**Runners**: Outputs into `runnerData.csv`\
+**Emails**: Outputs to `event[no]/emails.csv`
 
 
 ## CSV Formats
