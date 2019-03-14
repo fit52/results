@@ -10,7 +10,7 @@ The optional `--noPb` flag is to indicate that the times for this event should n
 Event data: `npm run get-event eventNo`\
 Participant data: `npm run get-runner-data`\
 Record data: `npm run get-records`\
-Emails of participants for an event: `npm run get-participant-emails eventNo`
+Emails of participants for an event: `npm run send-emails eventNo`
 
 **Modifying the db**\
 `npm run rebuild eventNo`\

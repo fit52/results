@@ -9,7 +9,7 @@
     "add-participants": "node ./src/populateDb.js",
     "get-event": "node ./src/outputs/getEventData.js",
     "get-records": "node ./src/outputs/getRecordData.js",
-    "get-participant-emails": "node ./src/outputs/getParticipantEmails.js",
+    "send-emails": "node ./src/email-processing/sendEmails.js",
     "rebuild": "node ./utils/rebuild.js"
   },
   "repository": {
