@@ -21,29 +21,39 @@ const dirPath = path.normalize(`${__dirname}/../../secrets/output-data/event${ev
 
 db.find({
     selector: {
-        _id: { $regex: '^runner/' },
+        _id: { $regex: `^(runner/|event/${eventNo})` },
         eventList: {
-            $elemMatch: {
-                'event.number': eventNo
-            }
+            $or: [
+                { $exists: false },
+                {
+                    $elemMatch: {
+                        'event.number': eventNo
+                    }
+                }
+            ]
         }
     },
     fields: [
+        '_id',
+        'results',
+        'uuid',
         'email'
     ]
 })
 .then(({ docs }) => {
-    if (docs.length === 0) throw new Error('Event provided doesn\'t exist');
+    // fs.writeFileSync(`${__dirname}/../../secrets/tempout.json`, JSON.stringify(docs, null, 4));
 
-    let out = docs.map(email => email.email );
+    let event = docs.find(value => value._id === `event/${eventNo}`);
 
-    fs.mkdir(dirPath, { recursive: true }, err => {
-        if (err && err.code !== 'EEXIST'){
-            console.error(err);
-        } else {
-            fs.writeFileSync(path.join(dirPath, 'emails.csv'), out.join('\n'));
-        }
-    });
+    docs.splice(docs.indexOf(event), 1);
+
+    for (let runner of docs) {
+        let result = event.results.find(value => value.uuid === runner.uuid);
+
+        console.log(result);
+
+    }
+
 })
 .then(() => console.log(`Output to ${path.join(dirPath, 'emails.csv' )}`))
 .catch(err => console.error(err.message));
