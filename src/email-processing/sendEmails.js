@@ -5,7 +5,6 @@
  * runners in an event
  */
 
-const fs = require('fs');
 const minimist = require('minimist');
 const path = require('path');
 const { db } = require('../connect')();
@@ -50,7 +49,7 @@ db.find({
     for (let runner of docs) {
         let result = event.results.find(value => value.uuid === runner.uuid);
 
-        console.log(result);
+        
 
     }
 
