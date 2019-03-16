@@ -1,0 +1,19 @@
+body {
+    font-family: sans-serif, monospace
+}
+
+.logo {
+    max-height: 100px;
+    max-width: 100px;
+    height: auto;
+    width: auto;
+}
+
+.link {
+    color: #3d70b2;
+    /* text-decoration: none; */
+}
+
+.link:visited {
+    color: initial;
+}

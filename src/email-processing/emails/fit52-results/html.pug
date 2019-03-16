@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+html(lang="en")
+    - let fit52 = "fit<strong>52</strong>"
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet", href="fit52-results.css")
+        title !{fit52} Results
+    body
+        p Hi #{forename},
+        p
+            |Thanks for coming along to !{fit52} ##{eventNo} on #{date}.
+            |Your time for the #{distance}K was #{time} with an age grade of #{ageGrade}
+            |#{pb ? " - that's a new personal best!" : "."}
+
+        p
+            |Head over to
+            |the #[a(href="https://fit52.eu-gb.mybluemix.net/", target="_blank").link !{fit52} website]
+            |for more info.
+
+        p
+            |Look forward to seeing you next time,
+
+        p
+            |The !{fit52} Guardians
+        img(src=`https://raw.githubusercontent.com/fit52/ui/master/src/images/logo.png`).logo
