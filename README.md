@@ -7,10 +7,11 @@
 The optional `--noPb` flag is to indicate that the times for this event should not count towards PBs or global records.
 
 **Getting data from the db**\
-Event data: `npm run get-event eventNo`\
-Participant data: `npm run get-runner-data`\
-Record data: `npm run get-records`\
-Emails of participants for an event: `npm run send-emails eventNo`
+* Event data: `npm run get-event eventNo`\
+* Participant data: `npm run get-runner-data`\
+* Record data: `npm run get-records`\
+* Emails of participants for an event: `npm run get-participant-emails eventNo`
+* Send personalised emails to participants in an event: `npm run send-emails eventNo`
 
 **Modifying the db**\
 `npm run rebuild eventNo`\
