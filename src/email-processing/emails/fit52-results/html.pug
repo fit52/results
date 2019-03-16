@@ -8,18 +8,20 @@ html(lang="en")
         link(rel="stylesheet", href="fit52-results.css")
         title !{fit52} Results
     body
-        h3 Hi #{forename},
-        p 
-            |Thanks for coming along to !{fit52}. 
+        p Hi #{forename},
+        p
+            |Thanks for coming along to !{fit52} ##{eventNo} on #{date}.
             |Your time for the #{distance}K was #{time} with an age grade of #{ageGrade}
-            |#{pb ? " - That's a new personal best!" : "."}
-        
-        p 
-            |Head over to 
-            |the #[a(href="https://fit52.eu-gb.mybluemix.net/", target="_blank").link !{fit52} website] 
+            |#{pb ? " - that's a new personal best!" : "."}
+
+        p
+            |Head over to
+            |the #[a(href="https://fit52.eu-gb.mybluemix.net/", target="_blank").link !{fit52} website]
             |for more info.
 
-        p 
-            |Look forward to seeing you next time,<br>
+        p
+            |Look forward to seeing you next time,
+
+        p
             |The !{fit52} Guardians
         img(src=`https://raw.githubusercontent.com/fit52/ui/master/src/images/logo.png`).logo

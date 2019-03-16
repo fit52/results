@@ -1,9 +1,9 @@
 /**
  * JavaScript
- * 
+ *
  * Gets the emails of the participants of the
  * runners in an event
- * 
+ *
  * Testing should be done with event 10
  */
 
@@ -22,16 +22,16 @@ const formatAgeGrade = (ageGrade) => {
 };
 
 const transport = nodemailer.createTransport({
-    host: '', // Add the host here
-    port: 1000, // And the port here
+    host: 'smtp.hursley.ibm.com',
+    port: 25,
 });
 
 const email = new Email({
     // preview: false, // Uncomment this to stop opening previews
-    // send: true, // Uncomment this to send emails
+    send: false, // Set to true to actually send emails
     transport,
     message: {
-        from: 'example@example.com' // Set the email address to send from
+        from: 'hursley.fit52@gmail.com' // Set the email address to send from
     },
     juiceResources: {
         webResources: {
@@ -50,25 +50,23 @@ if (!/\d+/.test(eventNo)) throw new Error('Invalid Event provided');
 
 db.find({
     selector: {
-        // Uncomment this block to use the real email addresses
-        // _id: { $regex: `^(runner/|event/${eventNo})` },
-        // eventList: {
-        //     $or: [
-        //         { $exists: false },
-        //         {
-        //             $elemMatch: {
-        //                 'event.number': eventNo
-        //             }
-        //         }
-        //     ]
-        // }
-        _id: `event/${eventNo}`
+        _id: { $regex: `^(runner/|event/${eventNo})` },
+        eventList: {
+            $or: [
+                { $exists: false },
+                {
+                    $elemMatch: {
+                        'event.number': eventNo
+                    }
+                }
+            ]
+        }
     },
     fields: [
         '_id',
         'results',
         'uuid',
-        'forename',
+        'firstname',
         'email'
     ]
 })
@@ -76,14 +74,15 @@ db.find({
     let event = docs.find(value => value._id === `event/${eventNo}`);
     docs.splice(docs.indexOf(event), 1);
 
-    // Remove to use real email addresses
-    docs = require('./fakeEmails.json');
-
     for (let runner of docs) {
         let result = event.results.find(value => value.uuid === runner.uuid);
 
         let timeMoment = moment.duration(result.time);
-        let time = moment({hours: timeMoment.hours(), minutes: timeMoment.minutes(), seconds: timeMoment.seconds()}).format('mm:ss');
+        let time = moment({
+            hours: timeMoment.hours(),
+            minutes: timeMoment.minutes(),
+            seconds: timeMoment.seconds()
+        }).format('mm:ss');
 
         email.send({
             template: `${__dirname}/emails/fit52-results`,
@@ -91,8 +90,9 @@ db.find({
                 to: runner.email
             },
             locals: {
+                eventNo,
                 date: moment(result.event.date).format('DD/MM/YYYY'),
-                forename: result.name, // This should be changed to runner.forename
+                forename: runner.firstname,
                 distance: result.distance,
                 pb: result.pb,
                 time,
@@ -100,7 +100,6 @@ db.find({
             }
         })
         .catch(err => console.error(err.message));
-
     }
 })
 .then(() => console.log('Done!'))
