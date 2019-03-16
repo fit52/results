@@ -4,7 +4,6 @@
  * Gets the emails of the participants of the
  * runners in an event
  *
- * Testing should be done with event 10
  */
 
 const Email = require('email-templates');
