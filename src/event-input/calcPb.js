@@ -1,5 +1,8 @@
 /**
- * Caculates if a participant has run a new
+ * JavaScript
+ * src/event-input/calcPb.js
+ * 
+ * Calculates if a participant has run a new
  * PB or if a new record time has been set and returns the result
  * and the new runner object
  */
@@ -13,26 +16,25 @@ const moment = require('moment');
  * @returns { { result: object, runner: object } } The modified result and runner objects
  */
 const calcPb = (result, runner) => {
-    let newPb = false;
+    let newPb = 0;
     
-    let distance = result.distance;
+    let distance = result.distance.toString();
     if (!['2', '5'].includes(distance)) throw new Error('distance invalid');
 
     let fastest = runner.stats[`records${distance}k`].fastest;
     let slowest = runner.stats[`records${distance}k`].slowest;
 
 
-    if (!fastest) {
+    if (!fastest /* Therefore also !slowest */) {
         runner.stats[`records${distance}k`].fastest = result;
-    } else if (!slowest) {
-        runner.stats[`records${distance}k`].slowest = result;
+        runner.stats[`records${distance}k`].slowest = result;        
     } else {
         let fastestTime = moment.duration(fastest.time).asSeconds();
         let slowestTime = moment.duration(slowest.time).asSeconds();
 
         if (moment.duration(result.time).asSeconds() < fastestTime) {
             runner.stats[`records${distance}k`].fastest = result;
-            newPb = true;
+            newPb = 1;
         }
 
         if (moment.duration(result.time).asSeconds() > slowestTime) {
@@ -43,9 +45,8 @@ const calcPb = (result, runner) => {
     let bestAgeGrade = runner.stats.recordsAgeGrade.best;
     let worstAgeGrade = runner.stats.recordsAgeGrade.worst;
 
-    if (!bestAgeGrade) {
+    if (!bestAgeGrade /* Therefore also !worstAgeGrade */) {
         runner.stats.recordsAgeGrade.best = result;
-    } else if (!worstAgeGrade) {
         runner.stats.recordsAgeGrade.worst = result;
     } else {
         if (result.ageGrade > bestAgeGrade.ageGrade) {
@@ -56,13 +57,10 @@ const calcPb = (result, runner) => {
             runner.stats.recordsAgeGrade.worst = result;
         }
     }
-
-    if (newPb && !result.firstEvent) {
-        runner.stats.noPbs ++;
-        result.pb = true;
-        // result.notes.push('PB');
-    }
-
+    
+    runner.stats.noPbs += newPb;
+    result.pb = (newPb === 1);
+    
     return {
         result,
         runner

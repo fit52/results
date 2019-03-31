@@ -1,4 +1,11 @@
-// gets the syncronous ver of module
+/**
+ * JavaScript
+ * src/event-input/getResults.js
+ * 
+ * Retrieves the raw data from the csv outputs
+ * from the stopwatch and runner files
+ */
+
 const csvParse = require('csv-parse/lib/sync');
 const fs = require('fs');
 const moment = require('moment');
@@ -80,8 +87,6 @@ const getAllData = (_path) => {
 };
 
 const mergeFinishTimes = (finishers, times, date, course) => {
-    // console.log('finishers: ', finishers.length);
-    // console.log('times: ', times.length);
     if (finishers.length !== times.length) throw new Error('Conflict in times and finishers');
 
     let output = [];
@@ -98,7 +103,7 @@ const mergeFinishTimes = (finishers, times, date, course) => {
             name: finishers[i][0],
             
             pos: i + 1,
-            distance: finishers[i][1],
+            distance: parseInt(finishers[i][1]),
 
             time: times[i],
             ageGrade: 0,
