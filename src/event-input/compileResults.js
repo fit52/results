@@ -1,4 +1,7 @@
 /**
+ * JavaScript
+ * src/event-input/compileResults.js
+ * 
  * Compiles the results (and runners) from a race and outputs
  * the new data
  */

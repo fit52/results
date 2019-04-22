@@ -1,8 +1,21 @@
+/**
+ * JavaScript
+ * src/event-input/checkRecords.js
+ * 
+ * Checks if a new global record has been set
+ * and updates the document.
+ */
+
 const moment = require('moment');
 
 /**
+ * Checks if there any runner appears more than once in the
+ * global records and removes duplicates
  * 
  * @param {any[]} records An array of the records
+ * @param {string} name The name of the runner
+ * 
+ * @returns {object} The new state of the records without any duplicates
  */
 const removeDuplicates = (records, name) => {
     let filtered = records.filter(value => {
@@ -38,6 +51,8 @@ const removeDuplicates = (records, name) => {
  * @param {object} globalRecords The current records from the db
  * @param {object} result The result from the event
  * @param {'f' | 'm'} gender The gender of the participant
+ * 
+ * @returns {object} The new state of the global records
  */
 const checkRecords = (globalRecords, result, gender) => {
     let distanceString = 'fastest' + result.distance + 'k';

@@ -1,4 +1,7 @@
 /**
+ * JavaScript
+ * src/event-input/calcAgeGrade.js
+ * 
  * Calculates the age grade for a give time, distance and gender
  * All data for the age grades is stored in 'age_grade_data/'
  */

@@ -1,4 +1,4 @@
-const { db } = require('./connect')();
+const { db } = require('../src/connect')();
 
 db.list()
 .then(res => {

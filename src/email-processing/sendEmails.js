@@ -1,5 +1,6 @@
 /**
  * JavaScript
+ * src/email-processing/sendEmails.js
  *
  * Gets the emails of the participants of the
  * runners in an event

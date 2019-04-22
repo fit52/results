@@ -90,8 +90,8 @@ const mergeFinishTimes = (finishers, times, date, course) => {
     if (finishers.length !== times.length) throw new Error('Conflict in times and finishers');
 
     let output = [];
-
     for (let i = 0; i < finishers.length; i++) {
+        if (['2', '5'].contains(finishers[i][1])) throw new Error('Invalid Distance');
         output.push({
             event: {
                 number: 0,
@@ -123,7 +123,6 @@ const getResults = (files) => {
     
     if (files.length > 1) {
         let finisherData = getFinishers(files[0]);
-
         finishers = finisherData.finishers;
         course = finisherData.course;
         

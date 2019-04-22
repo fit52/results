@@ -23,7 +23,7 @@ const updateRecords = async (globalRecords) => {
 };
 
 /**
- * Processes the results for an event given the finishs and times
+ * Processes the results for an event given the finishes and times
  * files should be provided in order finisher, times
  * 
  * @param {string[]} argv The paths for the files to get the data from

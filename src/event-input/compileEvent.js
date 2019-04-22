@@ -1,6 +1,11 @@
 /**
- * Complies an 'event' object to go into the db
+ * JavaScript
+ * src/event-input/compileEvent.js
  * 
+ * Complies an 'event' object to go into the db
+*/
+
+/**
  * @param {object[]} results The results from the event
  * @returns {object} The event object
  */

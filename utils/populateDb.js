@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid/v4');
 
-const { db } = require('./connect')();
+const { db } = require('../src/connect')();
 
 let runners = csvParse(fs.readFileSync(path.join('.', process.argv[2])));
 
