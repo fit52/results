@@ -16,54 +16,64 @@ const moment = require('moment');
  * @returns { { result: object, runner: object } } The modified result and runner objects
  */
 const calcPb = (result, runner) => {
+    let stats = Object.assign({}, runner.stats);
+    
     let newPb = 0;
     
     let distance = result.distance.toString();
     if (!['2', '5'].includes(distance)) throw new Error('distance invalid');
 
-    let fastest = runner.stats[`records${distance}k`].fastest;
-    let slowest = runner.stats[`records${distance}k`].slowest;
+    let fastest = stats[`records${distance}k`].fastest;
+    let slowest = stats[`records${distance}k`].slowest;
 
 
-    if (!fastest /* Therefore also !slowest */) {
-        runner.stats[`records${distance}k`].fastest = result;
-        runner.stats[`records${distance}k`].slowest = result;        
+    if (!fastest) {
+        // There isn't a fastest time thus also not a slowest so set to both
+        stats[`records${distance}k`].fastest = result;
+        stats[`records${distance}k`].slowest = result;        
     } else {
         let fastestTime = moment.duration(fastest.time).asSeconds();
         let slowestTime = moment.duration(slowest.time).asSeconds();
 
         if (moment.duration(result.time).asSeconds() < fastestTime) {
-            runner.stats[`records${distance}k`].fastest = result;
+            stats[`records${distance}k`].fastest = result;
             newPb = 1;
         }
 
         if (moment.duration(result.time).asSeconds() > slowestTime) {
-            runner.stats[`records${distance}k`].slowest = result;
+            stats[`records${distance}k`].slowest = result;
         }
     }
 
-    let bestAgeGrade = runner.stats.recordsAgeGrade.best;
-    let worstAgeGrade = runner.stats.recordsAgeGrade.worst;
+    let bestAgeGrade = stats.recordsAgeGrade.best;
+    let worstAgeGrade = stats.recordsAgeGrade.worst;
 
-    if (!bestAgeGrade /* Therefore also !worstAgeGrade */) {
-        runner.stats.recordsAgeGrade.best = result;
-        runner.stats.recordsAgeGrade.worst = result;
+    if (!bestAgeGrade) {
+        // There isn't a best age grade thus also not a worst so set to both
+        stats.recordsAgeGrade.best = result;
+        stats.recordsAgeGrade.worst = result;
     } else {
         if (result.ageGrade > bestAgeGrade.ageGrade) {
-            runner.stats.recordsAgeGrade.best = result;
+            stats.recordsAgeGrade.best = result;
         }
 
         if (result.ageGrade < worstAgeGrade.ageGrade) {
-            runner.stats.recordsAgeGrade.worst = result;
+            stats.recordsAgeGrade.worst = result;
         }
     }
     
-    runner.stats.noPbs += newPb;
-    result.pb = (newPb === 1);
+    stats.noPbs += newPb;
+    let resPb = (newPb === 1);
     
     return {
-        result,
-        runner
+        result: {
+            ...result,
+            pb: resPb
+        },
+        runner: {
+            ...runner,
+            stats
+        }
     };
 };
 
