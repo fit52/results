@@ -1,5 +1,8 @@
 /**
- * Caculates if a participant has run a new
+ * JavaScript
+ * src/event-input/calcPb.js
+ * 
+ * Calculates if a participant has run a new
  * PB or if a new record time has been set and returns the result
  * and the new runner object
  */
@@ -13,59 +16,64 @@ const moment = require('moment');
  * @returns { { result: object, runner: object } } The modified result and runner objects
  */
 const calcPb = (result, runner) => {
-    let newPb = false;
+    let stats = Object.assign({}, runner.stats);
     
-    let distance = result.distance;
+    let newPb = 0;
+    
+    let distance = result.distance.toString();
     if (!['2', '5'].includes(distance)) throw new Error('distance invalid');
 
-    let fastest = runner.stats[`records${distance}k`].fastest;
-    let slowest = runner.stats[`records${distance}k`].slowest;
+    let fastest = stats[`records${distance}k`].fastest;
+    let slowest = stats[`records${distance}k`].slowest;
 
 
     if (!fastest) {
-        runner.stats[`records${distance}k`].fastest = result;
-    } else if (!slowest) {
-        runner.stats[`records${distance}k`].slowest = result;
+        // There isn't a fastest time thus also not a slowest so set to both
+        stats[`records${distance}k`].fastest = result;
+        stats[`records${distance}k`].slowest = result;        
     } else {
         let fastestTime = moment.duration(fastest.time).asSeconds();
         let slowestTime = moment.duration(slowest.time).asSeconds();
 
         if (moment.duration(result.time).asSeconds() < fastestTime) {
-            runner.stats[`records${distance}k`].fastest = result;
-            newPb = true;
+            stats[`records${distance}k`].fastest = result;
+            newPb = 1;
         }
 
         if (moment.duration(result.time).asSeconds() > slowestTime) {
-            runner.stats[`records${distance}k`].slowest = result;
+            stats[`records${distance}k`].slowest = result;
         }
     }
 
-    let bestAgeGrade = runner.stats.recordsAgeGrade.best;
-    let worstAgeGrade = runner.stats.recordsAgeGrade.worst;
+    let bestAgeGrade = stats.recordsAgeGrade.best;
+    let worstAgeGrade = stats.recordsAgeGrade.worst;
 
     if (!bestAgeGrade) {
-        runner.stats.recordsAgeGrade.best = result;
-    } else if (!worstAgeGrade) {
-        runner.stats.recordsAgeGrade.worst = result;
+        // There isn't a best age grade thus also not a worst so set to both
+        stats.recordsAgeGrade.best = result;
+        stats.recordsAgeGrade.worst = result;
     } else {
         if (result.ageGrade > bestAgeGrade.ageGrade) {
-            runner.stats.recordsAgeGrade.best = result;
+            stats.recordsAgeGrade.best = result;
         }
 
         if (result.ageGrade < worstAgeGrade.ageGrade) {
-            runner.stats.recordsAgeGrade.worst = result;
+            stats.recordsAgeGrade.worst = result;
         }
     }
-
-    if (newPb && !result.firstEvent) {
-        runner.stats.noPbs ++;
-        result.pb = true;
-        // result.notes.push('PB');
-    }
-
+    
+    stats.noPbs += newPb;
+    let resPb = (newPb === 1);
+    
     return {
-        result,
-        runner
+        result: {
+            ...result,
+            pb: resPb
+        },
+        runner: {
+            ...runner,
+            stats
+        }
     };
 };
 

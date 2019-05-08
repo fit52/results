@@ -89,15 +89,11 @@ db.find({
     
             ageGrade: arr
         };
-
-        
     });
-
     return { runners, global_records: out };
 })
 .then(async docs => {
     let events;
-
     await db.find({
         selector: {
             _id: {
@@ -105,36 +101,29 @@ db.find({
             }
         }
     })
-    .then(res => {
-        let temp = res.docs;
-
-        temp.sort((a, b) => {
+    .then(({ docs: eventDocs }) => {
+        eventDocs.sort((a, b) => {
             let noA = a._id.match(/\/(\d*)$/)[1];
             let noB = b._id.match(/\/(\d*)$/)[1];
 
             return noA - noB;
         });
 
-        events = temp.filter(x => {
+        events = eventDocs.filter(x => {
             let eventNo = x._id.match(/\/(\d*)$/)[1];
 
             return eventNo <= upToEvent;
         });
-        // events = temp;
     });
 
     let global_records = docs.global_records;
-    for (let event of events) {
-        for (let result of event.results) {
-            let runnerindex = docs.runners.findIndex(x => x.uuid === result.uuid);
-            let runner = docs.runners[runnerindex];
-
-            result.distance = result.distance.toString();
+    events = events.map(event => {
+        event.results = event.results.map(result => {
+            let runnerIndex = docs.runners.findIndex(x => x.uuid === result.uuid);
+            let runner = docs.runners[runnerIndex];
 
             if (!event.noPb) {
-                let pbRes = calcPb(result, runner);
-                // This line may be unnecessary
-                runner = pbRes.runner;
+                ({result, runner} = calcPb(result, runner));
                 global_records = checkRecords(global_records, result, runner.gender);
             }
 
@@ -143,12 +132,14 @@ db.find({
             runner.stats.noTotalEvents ++;
             
             // console.log(docs.global_records);
-            docs.runners[runnerindex] = runner;
-        }
-    }
+            docs.runners[runnerIndex] = runner;
+            return result;
+        });
+        return event;
+    });
 
     // console.log(docs.global_records);
-    let out = [].concat(docs.runners, [global_records]);
+    let out = [].concat(docs.runners, events, [global_records]);
 
     db.bulk({ docs: out })
     .then(() => {
