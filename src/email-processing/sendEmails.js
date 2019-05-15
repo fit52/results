@@ -26,8 +26,8 @@ const transport = nodemailer.createTransport({
 });
 
 const email = new Email({
-    // preview: false, // Uncomment this to stop opening previews
-    send: false, // Set to true to actually send emails
+    preview: false,
+    send: true, // Set to true to actually send emails
     transport,
     message: {
         from: 'hursley.fit52@gmail.com' // Set the email address to send from
