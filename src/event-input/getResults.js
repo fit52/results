@@ -16,7 +16,7 @@ const getStopwatch = (_path) => {
 
     let stopwatch = csvParse(stopwatchFile, { relax_column_count: true });
     // console.log(stopwatch.length);
-    let date = moment(stopwatch.splice(0, 1)[0][3].slice(1, 11), 'DD/MM/YYYY');
+    let date = moment.utc(stopwatch.splice(0, 1)[0][3].slice(1, 11), 'DD/MM/YYYY');
 
     let times = stopwatch.map(x => {
         return moment.duration(x[1].trim());
