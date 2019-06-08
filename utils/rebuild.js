@@ -119,6 +119,9 @@ db.find({
     let global_records = docs.global_records;
     events = events.map(event => {
         event.results = event.results.map(result => {
+            // Updates data inside results to keep it inline with core data
+            result.event.date = event.date;
+
             let runnerIndex = docs.runners.findIndex(x => x.uuid === result.uuid);
             let runner = docs.runners[runnerIndex];
 
