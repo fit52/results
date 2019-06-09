@@ -57,44 +57,38 @@ const clearRunners = (res) => {
 
 
 // Get all runners and remove all data but the personal info
-db.find({
-    selector: {
-        _id: {
-            $regex: '^runner/'
+let resetRunners = db.find({
+        selector: {
+            _id: {
+                $regex: '^runner/'
+            }
         }
-    }
-})
-.then(clearRunners)
-// Clear the global record
-.then(async runners => {
-    let out;
+    })
+    .then(clearRunners);
 
-    await db.get('global_records')
+let resetGlobals = db.get('global_records')
     .then(res => {
         let arr = new Array(5).fill({});
 
-        out = {
+        return {
             _id: res._id,
             _rev: res._rev,
 
             fastest2k: {
-                female: arr,
-                male: arr
+                female: arr.slice(),
+                male: arr.slice()
             },
-    
+
             fastest5k: {
-                female: arr,
-                male: arr
+                female: arr.slice(),
+                male: arr.slice()
             },
-    
-            ageGrade: arr
+
+            ageGrade: arr.slice()
         };
     });
-    return { runners, global_records: out };
-})
-.then(async docs => {
-    let events;
-    await db.find({
+
+let getEvents = db.find({
         selector: {
             _id: {
                 $regex: '^event/'
@@ -109,21 +103,22 @@ db.find({
             return noA - noB;
         });
 
-        events = eventDocs.filter(x => {
+        return eventDocs.filter(x => {
             let eventNo = x._id.match(/\/(\d*)$/)[1];
 
             return eventNo <= upToEvent;
         });
     });
 
-    let global_records = docs.global_records;
+Promise.all([resetRunners, resetGlobals, getEvents])
+.then(async ([runners, global_records, events]) => {
     events = events.map(event => {
         event.results = event.results.map(result => {
             // Updates data inside results to keep it inline with core data
             result.event.date = event.date;
 
-            let runnerIndex = docs.runners.findIndex(x => x.uuid === result.uuid);
-            let runner = docs.runners[runnerIndex];
+            let runnerIndex = runners.findIndex(x => x.uuid === result.uuid);
+            let runner = runners[runnerIndex];
 
             if (!event.noPb) {
                 ({result, runner} = calcPb(result, runner));
@@ -134,15 +129,14 @@ db.find({
             runner.stats[`no${result.distance}k`] ++;
             runner.stats.noTotalEvents ++;
             
-            // console.log(docs.global_records);
-            docs.runners[runnerIndex] = runner;
+            runners[runnerIndex] = runner;
             return result;
         });
         return event;
     });
 
     // console.log(docs.global_records);
-    let out = [].concat(docs.runners, events, [global_records]);
+    let out = [].concat(runners, events, [global_records]);
 
     db.bulk({ docs: out })
     .then(() => {
