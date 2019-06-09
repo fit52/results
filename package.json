@@ -23,12 +23,12 @@
   },
   "homepage": "https://github.com/fit52/results#readme",
   "devDependencies": {
-    "eslint": "^5.15.1"
+    "eslint": "^5.16.0"
   },
   "dependencies": {
     "@cloudant/cloudant": "^2.3.0",
     "csv-parse": "^2.5.0",
-    "email-templates": "^5.0.4",
+    "email-templates": "^5.1.0",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
     "nodemailer": "^5.1.1",
