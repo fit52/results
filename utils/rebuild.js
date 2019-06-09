@@ -116,9 +116,12 @@ Promise.all([resetRunners, resetGlobals, getEvents])
         event.results = event.results.map(result => {
             // Updates data inside results to keep it inline with core data
             result.event.date = event.date;
+            result.event.number = event.number;
+            result.event.course = event.course;
 
+            // Get the runner index so that when we get a new runner object back later, we know where to put it
             let runnerIndex = runners.findIndex(x => x.uuid === result.uuid);
-            let runner = runners[runnerIndex];
+            let runner = Object.assign({}, runners[runnerIndex]);
 
             if (!event.noPb) {
                 ({result, runner} = calcPb(result, runner));
@@ -128,6 +131,7 @@ Promise.all([resetRunners, resetGlobals, getEvents])
             runner.eventList.push(result);
             runner.stats[`no${result.distance}k`] ++;
             runner.stats.noTotalEvents ++;
+            result.noEvents = runner.stats.noTotalEvents;
             
             runners[runnerIndex] = runner;
             return result;
