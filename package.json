@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@cloudant/cloudant": "^2.3.0",
-    "csv-parse": "^2.5.0",
+    "csv-parse": "^4.4.6",
     "email-templates": "^5.1.0",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
