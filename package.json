@@ -29,7 +29,7 @@
     "@cloudant/cloudant": "^2.3.0",
     "csv-parse": "^4.4.6",
     "email-templates": "^5.1.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "moment": "^2.22.2",
     "nodemailer": "^5.1.1",
     "pug": "^2.0.3",
