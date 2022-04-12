@@ -30,7 +30,7 @@
     "csv-parse": "^4.4.6",
     "email-templates": "^5.1.0",
     "minimist": "^1.2.6",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "nodemailer": "^6.6.1",
     "pug": "^3.0.1",
     "uuid": "^3.3.2"
